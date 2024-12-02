@@ -3,7 +3,7 @@
 
 WITH complaints_fact_table AS (
     SELECT
-        ROW_NUMBER() OVER (ORDER BY complaints.created_date) AS unique_complaint_key,  -- Ensuring unique keys if not already present
+        complaints.unique_key,  -- Ensuring unique keys if not already present
         ctd.complaint_type_dim_id,
         dd.date_dim_id,
         jd.junk_dim_id,
@@ -20,7 +20,7 @@ WITH complaints_fact_table AS (
             WHEN complaints.location_type IN ('Restaurant', 'Restaurant/Bar/Deli/Bakery') THEN 'Restaurant Types'
             WHEN complaints.location_type IN ('Catering Service', 'Catering Hall') THEN 'Catering Operations'
             ELSE 'Other Types'
-           END = jd.food_establishment_type_category
+           END = jd.Food_Establishment_Types
            AND jd.resolution_status = complaints.status
     LEFT JOIN `cis9440gp.dbt_qlin.location_dimension` ld
         ON ld.community_board = CASE complaints.community_board

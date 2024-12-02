@@ -20,7 +20,7 @@ WITH complaints_fact_table AS (
             WHEN complaints.location_type IN ('Restaurant', 'Restaurant/Bar/Deli/Bakery') THEN 'Restaurant Types'
             WHEN complaints.location_type IN ('Catering Service', 'Catering Hall') THEN 'Catering Operations'
             ELSE 'Other Types'
-           END = jd.Food_Establishment_Types
+           END = jd.food_establishment_types
            AND jd.resolution_status = complaints.status
     LEFT JOIN `cis9440gp.dbt_qlin.location_dimension` ld
         ON ld.community_board = CASE complaints.community_board
@@ -91,7 +91,9 @@ WITH complaints_fact_table AS (
             -- Continue for other boroughs and unspecified cases
             ELSE '999'
         END
-        AND complaints.street_name = ld.street_address  -- Assuming street_name matches directly with street_address in location_dimension
+        AND complaints.street_name = ld.street_address
+        And complaints.incident_zip = ld.zipcode
+        And complaints.borough = ld.city_borough -- Assuming street_name matches directly with street_address in location_dimension
 )
 SELECT *
 FROM complaints_fact_table

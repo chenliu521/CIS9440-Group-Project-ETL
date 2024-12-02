@@ -14,7 +14,7 @@ location_change AS(
         WHEN food_establishment_type IN ('Restaurant', 'Restaurant/Bar/Deli/Bakery') THEN 'Restaurant Types'
         WHEN food_establishment_type IN ('Catering Service', 'Catering Hall') THEN 'Catering Operations'
         ELSE 'Other Types'
-    END AS Food_Establishment_Types
+    END AS food_establishment_types
     FROM location
 ),
 status_check AS(
@@ -22,7 +22,7 @@ SELECT DISTINCT(status)AS resolution_status
 FROM `cis9440gp.RawDataset.FoodEstablishment`
 ),
 crossjoin AS(
-SELECT DISTINCT(Food_Establishment_Types), resolution_status
+SELECT DISTINCT(food_establishment_types), resolution_status
 FROM location_change
 CROSS JOIN status_check
 )

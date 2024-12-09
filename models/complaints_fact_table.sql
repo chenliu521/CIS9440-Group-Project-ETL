@@ -91,8 +91,8 @@ WITH complaints_fact_table AS (
             -- Continue for other boroughs and unspecified cases
             ELSE '999'
         END
-        AND complaints.street_name = ld.street_address
-        And complaints.incident_zip = ld.zipcode
+        AND COALESCE(complaints.street_name, 'Unspecified') = ld.street_address
+        And COALESCE(complaints.incident_zip, '99999') = ld.zipcode
         And complaints.borough = ld.city_borough -- Assuming street_name matches directly with street_address in location_dimension
 )
 SELECT *
